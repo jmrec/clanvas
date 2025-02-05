@@ -8,6 +8,9 @@
 README.rst
 
 venv/
+.venv/
 build/
 clanvas.egg-info/
 dist/
+
+.vscode/

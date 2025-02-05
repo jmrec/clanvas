@@ -51,7 +51,10 @@ def rstripped_fraction(score, possible):
 
 
 def unique_course_code(course):
-    return course.course_code.replace(' ', '') + '-' + str(course.id)
+    if hasattr(course, 'course_code'):
+        return course.course_code.replace(' ', '') + '-' + str(course.id)
+    else:
+        return ''
 
 
 def course_name_or_unique_course_code(course):
@@ -172,5 +175,5 @@ def filter_future_assignments(assignments):
 def filter_latest_term_courses(courses):
     if len(courses) == 0:
         return []
-    latest_term_int = max(course.enrollment_term_id for course in courses)
-    return filter(lambda course: course.enrollment_term_id == latest_term_int, courses)
+    latest_term_int = max(c.enrollment_term_id for c in courses if hasattr(c, 'enrollment_term_id'))
+    return filter(lambda c: hasattr(c, 'enrollment_term_id') and c.enrollment_term_id == latest_term_int, courses)

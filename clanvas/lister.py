@@ -31,7 +31,7 @@ def list_courses(courses, all=False, long=False):
     if display_courses:
         if long:
             def course_info_items(c):
-                return [c.course_code,
+                return [c.course_code if hasattr(c, 'course_code') else '',
                         c.id,
                         c.term['name'] if hasattr(c, 'term') else '',
                         c.name if hasattr(c, 'name') else '']
