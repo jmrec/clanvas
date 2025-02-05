@@ -31,9 +31,9 @@ class Clanvas(cmd2.Cmd):
         self.default_to_shell = True
         self.allow_cli_args = False
 
-        self.settable.update({'prompt_format': 'prompt format string'})
-        self.settable.update({'verbosity': 'default command verbosity (NORMAL/VERBOSE/DEBUG)'})
-        self.settable.pop('prompt')
+        self.settables.update({'prompt_format': 'prompt format string'})
+        self.settables.update({'verbosity': 'default command verbosity (NORMAL/VERBOSE/DEBUG)'})
+        # self.settable.pop('prompt')
 
         self.url = base_url
         self.host = urlparse(base_url).netloc
