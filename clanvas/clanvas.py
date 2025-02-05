@@ -7,6 +7,7 @@ from getpass import getpass
 from os import makedirs
 from os.path import isfile, join, expanduser
 from urllib.parse import urlparse
+from _thread import RLock
 
 import cmd2
 import colorama
@@ -46,6 +47,19 @@ class Clanvas(cmd2.Cmd):
         bind_outputter(functools.partial(self.poutput, end=''), self.get_verbosity)
 
         apply_completers(self)
+    
+    # Prevent pickling of stdin and locks   
+    def __getstate__(self):
+        state: list[tuple] = list()
+        for k, v in self.__dict__.items():
+            if not isinstance(v, RLock) and k not in ('stdin', 'stdout'):
+                state.append((k, v))
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self.stdin = sys.stdin
+        self.stdout = sys.stdout
 
     def get_caches(self):
         return self._caches
