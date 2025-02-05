@@ -13,7 +13,7 @@ setup(
     author='Mark Lalor',
     author_email='markwlalor@gmail.com',
     install_requires=[
-        'canvasapi==0.12.0', 'cmd2==0.9.12', 'tabulate>=0.8.3', 'tree-format>=0.1.2',
+        'canvasapi>=3.3.0', 'cmd2>=2.5.11', 'tabulate>=0.9.0', 'tree-format>=0.1.2',
         'html2text', 'colorama', 'pytz', 'tzlocal'
     ],
     extras_require={
