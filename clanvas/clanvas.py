@@ -26,6 +26,9 @@ from .utils import *
 class Clanvas(cmd2.Cmd):
     CLANVAS_CATEGORY = 'Clanvas'
 
+    def __post_init__(self):
+        self.settables.pop('prompt')
+
     def __init__(self, base_url, access_token, *args, **kwargs):
         super(Clanvas, self).__init__(*args, **kwargs)
 
@@ -34,7 +37,6 @@ class Clanvas(cmd2.Cmd):
 
         self.settables.update({'prompt_format': 'prompt format string'})
         self.settables.update({'verbosity': 'default command verbosity (NORMAL/VERBOSE/DEBUG)'})
-        # self.settable.pop('prompt')
 
         self.url = base_url
         self.host = urlparse(base_url).netloc
