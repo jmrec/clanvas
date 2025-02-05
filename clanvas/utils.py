@@ -169,7 +169,7 @@ def filter_days_from_today(iterable, days, key):
 
 def filter_future_assignments(assignments):
     now = pytz.UTC.localize(datetime.now())
-    return filter(lambda assignment: assignment.due_at_date >= now, assignments)
+    return filter(lambda a: hasattr(a, 'due_at_date') and a.due_at_date >= now, assignments)
 
 
 def filter_latest_term_courses(courses):

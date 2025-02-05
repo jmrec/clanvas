@@ -85,7 +85,8 @@ class Clanvas(cmd2.Cmd):
     @blocking_lru
     def list_announcements_cached(self, course_id):
         course = self.get_courses()[course_id]
-        return sorted(course.get_discussion_topics(only_announcements=True), key=lambda t: t.posted_at_date)
+        announcements = course.get_discussion_topics(only_announcements=True)
+        return sorted(filter(lambda a: hasattr(a, 'posted_at_date'), announcements), key=lambda t: t.posted_at_date)
 
     @blocking_lru
     def list_assignments_cached(self, course_id):
