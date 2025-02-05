@@ -1,6 +1,7 @@
 import os
 import readline
 import sys
+import re
 import webbrowser
 from functools import partialmethod
 from getpass import getpass
@@ -22,9 +23,9 @@ from .lister import *
 from .outputter import Verbosity, bind_outputter
 from .utils import *
 
-
 class Clanvas(cmd2.Cmd):
     CLANVAS_CATEGORY = 'Clanvas'
+    MIN_TAB_LEN = 2
 
     def __post_init__(self):
         self.settables.pop('prompt')
@@ -196,10 +197,20 @@ class Clanvas(cmd2.Cmd):
     @cmd2.with_argparser(wopen_parser)
     @argparser_course_required_wrapper
     def do_wopen(self, course: Course, opts):
-        course_tabs = self.list_tabs_cached(course.id)
-        given_tabs_set = frozenset([tab.lower() for tab in opts.tabs])
-
-        matched_tabs = list(filter(lambda course_tab: course_tab.label.lower() in given_tabs_set, course_tabs))
+        course_tabs = self.list_tabs_cached(course.id)        
+        given_tabs_set = frozenset(opts.tabs)
+        
+        if 'all' in given_tabs_set:
+            matched_tabs = course_tabs
+        else:
+            matched_tabs = set()
+            for given_tab in given_tabs_set:
+                if len(given_tab) < self.MIN_TAB_LEN:
+                    get_outputter().poutput(f'"{given_tab}" is too short.')
+                    continue
+                for course_tab in filter(lambda t: t not in matched_tabs, course_tabs):
+                    if re.match(given_tab, course_tab.label, re.IGNORECASE):
+                        matched_tabs.add(course_tab)
 
         if len(matched_tabs) == 0:
             for tab in opts.tabs:
